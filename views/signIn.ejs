@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<% include ../partials/head %>
+	</head>
+	<body>
+		<header>
+			<% include ../partials/header %>
+		</header>
+		<main>
+			<div>
+				<h2>Sign in page</h2>
+				<h3>Welcome to the chat ! Please fill up the form below to create an account.</h3>
+			</div>
+			<h4 id="error" class="error"><% if(locals.error) {%><%= locals.error %><%}%></h4>
+			<br>
+			<hr>
+			<br>
+			<div id="signIn">
+				<form action="/signIn/confirm" onsubmit="return validateForm()">
+					<input class="imp<% if(locals.error) {%> error<%}%>" id="userName" type="text" name="userName" placeholder="User name" value=<% if(locals.userData) {%><%= locals.userData.userName %><%}%>>
+						<span class="mandatory" title="Required"> *</span><br>
+					<input class="imp" id="firstName" type="text" name="firstName" placeholder="First name" value=<% if(locals.userData) {%><%= locals.userData.firstName %><%}%>><br>
+					<input class="imp" id="lastName" type="text" name="lastName" placeholder="Last name" value=<% if(locals.userData) {%><%= locals.userData.lastName %><%}%>><br>
+					<input class="imp" id="pwd" type="password" name="pwd" placeholder="User password" value=<% if(locals.userData) {%><%= locals.userData.password %><%}%>>
+						<span class="mandatory" title="Required"> *</span><br>
+					<input class="imp" id="rePwd" type="password" name="confPwd" placeholder="Confirm user password" value=<% if(locals.userData) {%><%= locals.userData.password %><%}%>>
+						<span class="mandatory" title="Required"> *</span><br>
+					<input id="submit" type="submit" value="Sign In">
+				</form>
+			</div>
+		</main>
+		<footer>
+			<% include ../partials/footer %>
+		</footer>
+		<script type="text/javascript">
+
+			$('#userName').change(function() {
+				$('#userName').css('color', 'black');
+			});
+
+			function validateForm() {
+				var userName = $('#userName').val();
+				var firstName = $('#firstName').val();
+				var lastName = $('#lastName').val();
+				var pwd = $('#pwd').val();
+				var rePwd = $('#rePwd').val();
+
+				if (!userName || 15 < userName.length || userName.length < 3 || !userName.match(/[a-zA-Z0-9]/)) {
+					console.log('You have to select a user name.');
+					$('#error').html('You have to select a user name between 3 and 15 chars. It must contains only uppercase and lowercase chars and digits.');
+					return false;
+				} else if (!pwd || 21 < pwd || pwd < 4) {
+					console.log('You have to select a password.');
+					$('#error').html('You have to select a password between 4 and 20 chars.');
+					return false;
+				} else if (pwd != rePwd) {
+					console.log('The two passwords have to be equal.');
+					$('#error').html('The two passwords have to be equal.');
+					return false;
+				} else {
+					console.log('Submitting form !');
+					return true;
+				}
+			}
+		</script>
+	</body>
+</html>

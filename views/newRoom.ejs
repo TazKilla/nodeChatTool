@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<% include ../partials/head %>
+	</head>
+	<body>
+		<header>
+			<% include ../partials/header %>
+		</header>
+		<main>
+			<div>
+				<h2>New room page</h2>
+				<h3>Here you can create a new chat room</h3>
+			</div>
+			<h4 id="error" class="error"><% if(locals.error) {%><%= locals.error %><%}%></h4>
+			<br>
+			<hr>
+			<br>
+			<div id="newRoom">
+				<form action="/newRoom/confirm" onsubmit="return validateForm()">
+					<label for="roomName">Room name</label>
+					<input type="text" id="roomName" name="roomName" value=<% if(locals.roomData) { %><%= locals.roomData.roomName %><% } %>><br>
+					<label>Private room</label><br>
+					<label for="privateYes">Yes</label>
+					<input type="radio" id="privateYes" name="private" value="yes" <% if(locals.roomData) { if(locals.roomData.private == 'yes') { %>checked<% }} %>>
+					<label for="privateNo">No</label>
+					<input type="radio" id="privateNo" name="private" value="no" <% if(!locals.roomData || locals.roomData.private == 'no') { %>checked<% } %>>
+					<label hidden id="pwdLabel" for="password">Password</label>
+					<input hidden id="password" name="password" type="password" value=<% if(locals.roomData) { %><%= locals.roomData.password %><% } %>><br>
+					<input type="submit" name="submit" value="Create">
+				</form>
+				<br>
+			</div>
+		</main>
+		<footer>
+			<% include ../partials/footer %>
+		</footer>
+		<script type="text/javascript" src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+		<script type="text/javascript">
+			var roomName = '';
+			var private = 'no';
+			var password = '';
+
+			$('[name=private]').click(function() {
+				console.log(this.value);
+				if (this.value == 'yes') {
+					$('#password').prop('hidden', false);
+					$('#pwdLabel').prop('hidden', false);
+					private = 'yes';
+				} else {
+					$('#password').prop('hidden', true);
+					$('#pwdLabel').prop('hidden', true);
+					$('#password').val('');
+					private = 'no';
+				}
+			});
+			function validateForm() {
+				roomName = $('#roomName').val();
+				password = $('#password').val();
+				console.log(private);
+				console.log(password);
+
+				if (!roomName || 15 < roomName || roomName < 3 || !roomName.match(/[a-zA-Z0-9]/)) {
+					console.log('You have to select a room name.');
+					$('#error').html('You have to select a room name between 3 and 15 chars. It must contains only uppercase and lowercase chars and digits.');
+					return false;
+				} else if (private == 'yes') {
+					 if (!password || 21 < password || password < 4) {
+						console.log('You have to select a password.');
+						$('#error').html('You have to select a password between 4 and 20 chars.');
+						return false;
+					}
+				}
+				console.log('Submitting form');
+				return true;
+			}
+		</script>
+	</body>
+</html>

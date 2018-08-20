@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<% include ../partials/head %>
+	</head>
+	<body>
+		<header>
+			<% include ../partials/header %>
+		</header>
+		<main>
+			<div>
+				<h2>Rooms page</h2>
+				<h3>Welcome to the rooms list ! Please select a room before to start chatting...</h3>
+			</div>
+			<h4 id="error" class="error"><% if(locals.error) {%><%= locals.error %><%}%></h4>
+			<br>
+			<hr>
+			<br>
+			<p>
+				<h4>Active rooms</h4>
+				<%
+					var active = 0;
+					if (rooms.length > 0) {
+						for (var i = 0; i < rooms.length; i++) {
+							if (rooms[i].users > 0) {
+								active++;
+								%>
+								Room <%= i + 1 %> : <a href="/room/<%= rooms[i].id %>"><%= rooms[i].name %></a> <% if(rooms[i].creator_id == locals.session.userid) { %><a href="/room/edit/<%= rooms[i].id %>">Edit</a><% } %><br>
+								<%
+							}
+						}
+					}
+					if (active == 0) {
+						%>
+						No active room, you can open a new one <a href="/newRoom">here</a>.<br>
+						<br>
+						<%
+					}
+				%>
+			</p>
+			<hr>
+			<p>
+				<h4>Inactive rooms</h4>
+				<%
+					var inactive = 0;
+					if (rooms.length > 0) {
+						for (var i = 0; i < rooms.length; i++) {
+							if (rooms[i].users == 0) {
+								inactive++;
+								%>
+								Room <%= i + 1 %> : <a href="/room/<%= rooms[i].id %>"><%= rooms[i].name %></a> <% if(rooms[i].creator_id == locals.session.userid) { %><a href="/room/edit/<%= rooms[i].id %>"> - Edit</a><% } %> - <%= rooms[i].users %> user<%= rooms[i].users > 1 ? 's' : ''%><span class="error" title="Private room"><%= rooms[i].private == 'yes' ? ' P' : ''%></span><br>
+								<%
+							}
+						}
+					}
+					if (inactive == 0) {
+						%>
+						No inactive room.<br>
+						<br>
+						<%
+					}
+				%>
+			</p>
+		</main>
+		<footer>
+			<% include ../partials/footer %>
+		</footer>
+	</body>
+</html>

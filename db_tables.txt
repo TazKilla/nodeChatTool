@@ -1,0 +1,25 @@
+room {
+	id:			integer primaryKey
+	name:		varChar
+	private:	integer
+}
+
+history {
+	id:			integer primaryKey
+	type:		ENUM [info, message]
+	room_id:	integer
+	user_id:	integer
+	message:	varChar
+	time:		dateTime
+}
+
+user {
+	id:			integer primaryKey
+	user_name:	varChar
+	first_name:	varChar
+	last_name:	varChar
+	password:	varChar
+}
+
+DB usr - postgres
+DB pwd - talkamynn

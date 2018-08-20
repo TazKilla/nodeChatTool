@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<% include ../partials/head %>
+	</head>
+	<body>
+		<header>
+			<% include ../partials/header %>
+		</header>
+		<main>
+			<div>
+				<h2>Home page</h2>
+				<h3>Welcome to the chat !</h3>
+			</div>
+			<h4 id="error" class="error"><% if(locals.error) {%><%= locals.error %><%}%></h4>
+			<br>
+			<hr>
+			<br>
+			<% if(!locals.session.username) {%>
+				<h3>Please log in or sign in.</h3>
+				<div id="logIn">
+					<form action="/logIn" onsubmit="return validateForm()">
+						<input class="formCenter" type="text" name="userName" placeholder="User name"><br>
+						<input class="formCenter" type="password" name="pwd" placeholder="User password"><br>
+						<input class="formCenter" type="submit" value="Log In">
+					</form>
+					You don't have an account ? Just <a href="/signIn">sign in</a> now !
+				</div>
+			<% } else { %>
+				<h3>Last news from the chat community</h3>
+				<div id="news">
+					<p>
+						Coming soon
+						<hr>
+						Friday 15th Dec. - Big Xmas party with Musala !<br>
+					</p><br>
+					<p>
+						Last week
+						<hr>
+						Monday 11th Dec. - Two new rooms created<br>
+						Friday 8th Dec. - Val left the chat<br>
+					</p>
+				</div>
+			<% } %>
+		</main>
+		<footer>
+			<% include ../partials/footer %>
+		</footer>
+	</body>
+</html>

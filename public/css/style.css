@@ -1,0 +1,140 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	width: 595px;
+	margin: 15px;
+	box-shadow: 10px 10px 25px grey;
+}
+
+header {
+	background-color: lightgrey;
+	height: 100px;
+}
+
+footer {
+	padding: 10px;
+	background-color: lightgrey;
+}
+
+footer p {
+	margin: auto;
+	text-align: center;
+}
+
+li {
+	list-style: none;
+}
+
+main {
+	text-align: center;
+}
+
+a {
+	color: black;
+	text-decoration: none;
+}
+
+#menu li {
+	float: left;
+	background-color: lightgrey;
+	-webkit-transition: background-color 1s;
+	transition: background-color 1s;
+	padding: 8px;
+	width: 81px;
+	text-align: center;
+	border: 1px solid black;
+	border-radius: 2px;
+}
+
+#menu li:hover {
+	background-color: grey;
+}
+
+#logIn {
+	background-color: lightblue;
+	width: 200px;
+	margin: 15px auto;
+	padding: 15px;
+	border: 1px solid black;
+	border-radius: 2px;
+}
+
+#signIn {
+	background-color: lightblue;
+	width: 200px;
+	margin: 15px auto;
+	padding: 15px;
+	border: 1px solid black;
+	border-radius: 2px;
+}
+
+#bugForm {
+	background-color: lightblue;
+	width: 200px;
+	margin: 15px auto;
+	padding: 15px;
+	border: 1px solid black;
+	border-radius: 2px;
+}
+
+#newRoom {
+	background-color: lightblue;
+	width: 200px;
+	margin: 15px auto;
+	padding: 15px;
+	border: 1px solid black;
+	border-radius: 2px;
+}
+
+#profile {
+	background-color: lightblue;
+	width: 200px;
+	margin: 15px auto;
+	padding: 15px;
+	border: 1px solid black;
+	border-radius: 2px;
+}
+
+#signIn input {
+	margin-bottom: 5px;
+}
+
+#signIn .imp {
+	float: left;
+}
+
+#logIn input {
+	margin-bottom: 5px;
+}
+
+#homeLogo {
+	width: 100px;
+	float: left;
+}
+
+.mandatory {
+	color: red;
+}
+
+.formCenter {
+	margin: auto;
+}
+
+.header {
+	margin-left: 115px;
+}
+
+.error {
+	color: red;
+}
+
+#devAlert {
+	color: red;
+}
+
+#bugForm {
+	width: 400px;
+}

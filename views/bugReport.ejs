@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<% include ../partials/head %>
+	</head>
+	<body>
+		<header>
+			<% include ../partials/header %>
+		</header>
+		<main>
+			<div>
+				<h2>Bug report page</h2>
+				<h3>If you found a bug, please fill up the form below, and we will fix it asap.</h3>
+			</div>
+			<h4 id="error" class="error"><% if(locals.error) {%><%= locals.error %><%}%></h4>
+			<br>
+			<hr>
+			<br>
+			<div>
+				<form id="bugForm">
+					Which page do you want to report
+					</br>
+					<select name="page">
+						<option value="home">Home</option>
+						<option value="rooms">Rooms</option>
+						<option value="chat">Chat</option>
+						<option value="bugReport">Bug report</option>
+						<option value="account">Account</option>
+					</select>
+					</br>
+					</br>
+					<hr>
+					What type of bug is it
+					</br>
+					<select name="type">
+						<option value="design">Design issue</option>
+						<option value="link">Dead link</option>
+						<option value="typo">Text typo</option>
+						<option value="other">Other</option>
+					</select>
+					</br>
+					</br>
+					<hr>
+					Please give us some details
+					</br>
+					<textarea name="detail" cols="40" rows="5"></textarea>
+					</br>
+					</br>
+					<hr>
+					<input type="submit" value="Submit">
+				</form>
+			</div>
+		</main>
+		<footer>
+			<% include ../partials/footer %>
+		</footer>
+	</body>
+</html>

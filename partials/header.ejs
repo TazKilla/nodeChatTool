@@ -1,0 +1,18 @@
+<%
+	var logged = false;
+	if(locals.session.username) {
+		logged = true;
+	}
+%>
+<a href="/"><img id="homeLogo" src="../imgs/chat_picto.jpg"></a>
+<h2 class="header">The awesome chat from the future</h2>
+<h4 class="header" id="devAlert">This site is still in development, be kind if you found some bugs, and please report it through the link "Report a bug" on the footer ;)</h4>
+<nav id="menu">
+	<ul>
+		<a href="/"><li>Home</li></a>
+		<a href=<%= logged ? '/rooms' : '#'%>><li>Rooms</li></a>
+		<a href=<%= logged ? '/bugReport' : '#'%>><li>Report</li></a>
+		<a href=<%= logged ? '/profile/' + locals.session.userid : '#'%>><li>Account</li></a>
+		<a href=<%= logged ? '/logOut' : '/signIn'%>><li><%= logged ? 'Log out' : 'Sign in'%></li></a>
+	</ul>
+</nav>

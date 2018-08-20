@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<% include ../partials/head %>
+	</head>
+	<body>
+		<header>
+			<% include ../partials/header %>
+		</header>
+		<main>
+			<div>
+				<h2>Legal page</h2>
+				<h3>Please refer to this page regarding legal points.</h3>
+			</div>
+			<h4 id="error" class="error"><% if(locals.error) {%><%= locals.error %><%}%></h4>
+			<br>
+			<hr>
+			<br>
+			<div>
+				<p>
+					<h5>Copyright Guillaume Roche 2017</h5>
+					There is nothing special to say...<br>
+					Please don't misuse this web site.
+				</p>
+			</div>
+		</main>
+		<footer>
+			<% include ../partials/footer %>
+		</footer>
+	</body>
+</html>

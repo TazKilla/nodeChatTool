@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<% include ../partials/head %>
+	</head>
+	<body>
+		<header>
+			<% include ../partials/header %>
+		</header>
+		<main>
+			<div>
+				<h2>Room: <%= roomData.name %></h2>
+				<h3 id="usersCounter"><%= roomData.users %> user<% roomData.users > 1 ? 's' : ''%> connected</h3>
+				<input type="button" value="Leave the room" id="leave" />
+			</div>
+			<h4 id="error" class="error"><% if(locals.error) {%><%= locals.error %><%}%></h4>
+			<br>
+			<hr>
+			<br>
+			<div id="room">
+				<p>
+					<input type="text" id="userMessage" placeholder="Type your message here...">
+					<input type="button" value="Send" id="send" />
+				</p>
+
+				<p id="chatFlow" style="background-color: rgb(238, 238, 238); width: 450px;">
+					<%
+						for (var i = 0; i < history.length; i++) {
+							if (history[i].userName != '') {
+								$('#chatFlow').prepend($('<p><b title="' + history[i].time + '" style="color: ' + history[i].userColor + ';">' + history[i].userName + '</b> - ' + history[i].message + '</p>').fadeIn('slow'));
+							} else {
+								$('#chatFlow').prepend($('<p><i title="' + history[i].time + '">' + history[i].message + '</i></p>').fadeIn('slow'));
+							}
+						}
+					%>
+				</p>
+
+				<script type="text/javascript" src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+				<script type="text/javascript" src="/socket.io/socket.io.js"></script>
+				<script type="text/javascript">
+					// Open socket to the server
+					var socket = io();
+					// var socket = io.connect('http://localhost:8080');
+					// Variables initialization
+					var userLogged = false;
+					var pseudo = '';
+					var userColor = '';
+					var tmpUserColor = '';
+					var users = 0;
+
+					socket.on('areYouAlive', function() {
+						// console.log('Server ask if I am alive !');
+						socket.emit('iAmAlive');
+					});
+
+					// Defines client behavior when receiving a message from the server
+					socket.on('message', function(message) {
+						// In case of successful login, switch from Home page (default) to chat page
+						if (message.type == 'validConn') {
+							userLogged = true;
+							userColor = message.userColor;
+							var history = message.history;
+
+							// document.getElementById("success").innerHTML = message.content;
+							// document.getElementById("error").innerHTML = '';
+							// document.getElementById("pageTitle").innerHTML = 'Chat page';
+							// document.getElementById("advice").innerHTML = 'Please be gentle when using the chat !';
+							// document.getElementById("mainButton").value = 'Send';
+							// document.getElementById("userMessage").type = 'text';
+							// document.getElementById("logOut").type = 'button';
+							$('#chatFlow').prepend($('<p><i title="' + message.time + '">Welcome to the chat !</i></p>').fadeIn('slow'));
+						}
+						// In case of error, displays it and remove eventual other message
+						else if (message.type == 'error') {
+							document.getElementById("error").innerHTML = message.content;
+							document.getElementById("success").innerHTML = '';
+						}
+						// In case of info message, just log it on the browser console
+						else if (message.type == 'info') {
+							console.log('Message from the server: ');
+							console.log(message.content);
+						}
+						// In case of new users' message on the chat, adds it to the flow
+						else if (message.type == 'userMessage' && userLogged) {
+							tmpUserColor = message.userColor;
+							$('#chatFlow').prepend($('<p><b title="' + message.time + '" style="color: ' + tmpUserColor + ';">' + message.userName + '</b> - ' + message.content + '</p>').fadeIn('slow'));
+						}
+						// If a new user logs in, say it to other users
+						else if (message.type == 'newUser' && userLogged) {
+							$('#chatFlow').prepend($('<p><i title="' + message.time + '">' + message.content + '</i></p>').fadeIn('slow'));
+						}
+						// If a user left the chat, say it to other users
+						else if (message.type == 'userLeft' && userLogged) {
+							$('#chatFlow').prepend($('<p><i title="' + message.time + '">' + message.content + '</i></p>').fadeIn('slow'));
+						}
+						// If the message have been successfully processed by server, add time as title
+						else if (message.type == 'successSend' && userLogged) {
+							document.getElementById("lastMsg").title = message.time;
+							document.getElementById("lastMsg").id = '';
+						}
+						// If the message contains the number of active users, update it on the page
+						if (message.users) {
+							users = message.users;
+							var userNb = users + ' user' + (users > 1 ? 's' : '') + ' connected.';
+							document.getElementById("usersCounter").innerHTML = userNb;
+						}
+					});
+
+					// If the user click on the button, check its value and act as it should
+					$('#leave').click(function() {
+						// If value == 'Log In', so ask for user name, check it's valid and send it to the server
+						if (confirm('Do you really want to quit the room ?')) {
+							socket.disconnect();
+						}
+					});
+
+					$('#send').click(function() {
+						if ($('#userMessage').val() != '') {
+							sendMessage();
+						}
+					});
+
+					// If the user hits 'Enter' from the text input, do the same as a click on 'Send' 
+					$('#userMessage').on('keyup', function(e) {
+						if (e.keyCode == 13 && $('#userMessage').val() != '') {
+							sendMessage();
+						}
+					})
+
+					// If the user wants to reload or close the browser window/tab ask for confirmation
+					// window.onbeforeunload = function(e) {
+					// 	console.log('before if');
+					// 	if (e) {
+					// 		e.returnValue = 'Some text';
+					// 	}
+					// 	return 'Some text';
+					// }
+
+					// Send new chat message to the server
+					function sendMessage() {
+						var d = new Date();
+						var time = d.toLocaleString().slice(-8);
+						var userMessage = document.getElementById("userMessage").value;
+						socket.emit('userMessage', userMessage);
+						document.getElementById("userMessage").value = '';
+						// document.getElementById("success").innerHTML = '';
+						$('#chatFlow').prepend($('<p style="background-color: rgb(255, 255, 255);"><b id="lastMsg" title="Sending..." style="color: ' + userColor + ';">' + pseudo + '</b> - ' + userMessage + '</p>').fadeIn('slow'));
+					}
+				</script>
+			</div>
+		</main>
+		<footer>
+			<% include ../partials/footer %>
+		</footer>
+	</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<% include ../partials/head %>
+	</head>
+	<body>
+		<header>
+			<% include ../partials/header %>
+		</header>
+		<main>
+			<div>
+				<h2>User profile page</h2>
+				<h3>Here you can consult or update your profile information</h3>
+			</div>
+			<h4 id="error" class="error"><% if(locals.error) {%><%= locals.error %><%}%></h4>
+			<br>
+			<hr>
+			<br>
+			<div id="profile">
+				<form action="/profile/edit">
+					<label for="username">User name</label>
+					<input disabled name="username" type="text" value=<% if(locals.userData) {%><%= locals.userData.userName %><%}%>><br>
+					<label for="firstname">First name</label>
+					<input disabled name="firstname" type="text" value=<% if(locals.userData) {%><%= locals.userData.firstName %><%}%>><br>
+					<label for="lastname">Last name</label>
+					<input disabled name="lastname" type="text" value=<% if(locals.userData) {%><%= locals.userData.lastName %><%}%>><br>
+					<label for="password">Password</label>
+					<input disabled name="password" type="password" value=<% if(locals.userData) {%><%= locals.userData.password %><%}%>><br>
+				</form>
+				<br>
+			</div>
+		</main>
+		<footer>
+			<% include ../partials/footer %>
+		</footer>
+	</body>
+</html>
